@@ -1,7 +1,7 @@
 // Browser build: app.js's /api/... requests go to the Python app running in
 // py/worker.js instead of a local server. pyFetch() returns a real Response,
 // so app.js's api() keeps working unchanged apart from fetch -> pyFetch.
-const pyWorker = new Worker('py/worker.js?v=202610231443');
+const pyWorker = new Worker('py/worker.js?v=202610231624');
 const pyPending = new Map();
 let pySeq = 0;
 

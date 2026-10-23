@@ -1050,6 +1050,45 @@ function onLangChange() {
   }
 }
 
+// ---------- course from a link ----------
+// ?gpx=<GPX URL>&name=<race name>&start=yyyy-MM-ddTHH:mm&cutoffs=A3=19:00,A5=23:00,FINISH=10:00
+// lets another page (e.g. a race info page) open the planner with the course,
+// start time and cutoffs filled in. Cutoffs are matched to CPs by the first
+// word of the GPX waypoint name ("A3 Pagia ..." -> A3), START/FINISH by role.
+async function loadCourseFromLink(params) {
+  const gpxUrl = params.get('gpx');
+  const name = (params.get('name') || '').replace(/[\/:*?"<>|]/g, ' ').trim();
+  const start = params.get('start') || '';
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(start)) document.getElementById('raceStart').value = start;
+  openTab('predictTab');
+  showMsg('uploadMsg', t('link.loading', { name: esc(name || gpxUrl) }), 'info');
+  let file;
+  try {
+    const resp = await fetch(gpxUrl);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const fileName = (name || decodeURIComponent(new URL(gpxUrl, location.href).pathname.split('/').pop()).replace(/\.gpx$/i, '')) + '.gpx';
+    file = new File([await resp.blob()], fileName, { type: 'application/gpx+xml' });
+  } catch (e) {
+    showMsg('uploadMsg', t('link.failed', { v: esc(e.message) }), 'error');
+    return;
+  }
+  await handleFile(file);
+  if (!state.uploadId) return;
+  const cutoffs = {};
+  (params.get('cutoffs') || '').split(',').forEach((pair) => {
+    const [code, clock] = pair.split('=');
+    if (code && clock) cutoffs[code.trim().toUpperCase()] = clock.trim();
+  });
+  let applied = 0;
+  state.cps.forEach((cp, i) => {
+    if (i === 0) return;
+    const code = i === state.cps.length - 1 ? 'FINISH' : cp.name.trim().split(/\s/)[0].toUpperCase();
+    if (cutoffs[code]) { cp.cutoff = cutoffs[code]; applied++; }
+  });
+  renderCpTable();
+  showMsg('uploadMsg', t('link.loaded', { name: esc(name || state.filename), n: applied }), 'ok');
+}
+
 async function init() {
   applyStaticI18n();
   document.querySelectorAll('.lang-btn').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang)));
@@ -1094,6 +1133,8 @@ async function init() {
   // exists, then straight to 予測.
   let hasPersonalModel = false;
   try { hasPersonalModel = (await api('/api/my-races')).is_custom_model; } catch (e) {}
+  const params = new URLSearchParams(location.search);
+  if (params.get('gpx')) { await loadCourseFromLink(params); return; }
   openTab(hasPersonalModel ? 'predictTab' : 'myRacesTab');
 }
 

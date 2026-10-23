@@ -4,7 +4,7 @@
 // synced back after every non-GET request.
 importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js');
 
-const BUILD = '202610231443';
+const BUILD = '202610231624';
 let pyodide = null;
 let handle = null;
 let pdfReady = false;

@@ -19,6 +19,9 @@ const I18N = {
     'course.dzSub': '.gpx ファイルのみ対応',
     'course.dzPicked': '{name}(タップで別のファイルを選択)',
     'course.loading': '読み込み中...',
+    'link.loading': '{name} のコースを読み込み中...',
+    'link.loaded': '{name} のコース・スタート時刻・関門（{n} か所）を入れました。CP の設定で確認できます。',
+    'link.failed': 'コースを読み込めませんでした({v})。GPX をダウンロードして選んでください。',
     'stat.distance': '距離',
 
     // ----- 予測: 2. レース条件 -----
@@ -195,6 +198,9 @@ const I18N = {
     'course.dzSub': '.gpx files only',
     'course.dzPicked': '{name} (tap to choose another file)',
     'course.loading': 'Loading...',
+    'link.loading': 'Loading the {name} course...',
+    'link.loaded': 'Loaded the {name} course, start time and {n} cutoffs. Check them under checkpoint settings.',
+    'link.failed': 'Could not load the course ({v}). Download the GPX and choose it here.',
     'stat.distance': 'Distance',
 
     'setup.title': '2. Race conditions',
