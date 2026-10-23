@@ -1,0 +1,200 @@
+{
+  "generated_at": "2026-09-29T00:45:44.240022+00:00",
+  "recency_half_life_days": 180.0,
+  "slope_bucket_width_pct": 3.0,
+  "races": [
+    {
+      "recency_weight": 0.2342,
+      "avg_temp_c": 23.0,
+      "avg_humidity_pct": 77.7,
+      "name": "race 1"
+    },
+    {
+      "recency_weight": 1.0,
+      "avg_temp_c": 22.8,
+      "avg_humidity_pct": 84.8,
+      "name": "race 2"
+    },
+    {
+      "recency_weight": 0.3162,
+      "avg_temp_c": 15.7,
+      "avg_humidity_pct": 86.7,
+      "name": "race 3"
+    },
+    {
+      "recency_weight": 0.1649,
+      "avg_temp_c": 9.7,
+      "avg_humidity_pct": 54.2,
+      "name": "race 4"
+    },
+    {
+      "recency_weight": 0.1931,
+      "avg_temp_c": 18.6,
+      "avg_humidity_pct": 61.4,
+      "name": "race 5"
+    },
+    {
+      "recency_weight": 0.9013,
+      "avg_temp_c": 26.5,
+      "avg_humidity_pct": 86.0,
+      "name": "race 6"
+    },
+    {
+      "recency_weight": 0.8539,
+      "avg_temp_c": 27.0,
+      "avg_humidity_pct": 83.9,
+      "name": "race 7"
+    },
+    {
+      "recency_weight": 0.6857,
+      "avg_temp_c": 25.4,
+      "avg_humidity_pct": 82.5,
+      "name": "race 8"
+    },
+    {
+      "recency_weight": 0.8091,
+      "avg_temp_c": 23.5,
+      "avg_humidity_pct": 65.3,
+      "name": "race 9"
+    }
+  ],
+  "slope_pace_model": {
+    "-60.0": {
+      "pace_min_km": 24.84,
+      "sample_bins": 1
+    },
+    "-51.0": {
+      "pace_min_km": 22.39,
+      "sample_bins": 3
+    },
+    "-48.0": {
+      "pace_min_km": 19.1,
+      "sample_bins": 4
+    },
+    "-45.0": {
+      "pace_min_km": 17.16,
+      "sample_bins": 1
+    },
+    "-42.0": {
+      "pace_min_km": 18.92,
+      "sample_bins": 7
+    },
+    "-39.0": {
+      "pace_min_km": 18.06,
+      "sample_bins": 8
+    },
+    "-36.0": {
+      "pace_min_km": 16.83,
+      "sample_bins": 21
+    },
+    "-33.0": {
+      "pace_min_km": 12.99,
+      "sample_bins": 25
+    },
+    "-30.0": {
+      "pace_min_km": 14.51,
+      "sample_bins": 26
+    },
+    "-27.0": {
+      "pace_min_km": 13.01,
+      "sample_bins": 42
+    },
+    "-24.0": {
+      "pace_min_km": 12.05,
+      "sample_bins": 73
+    },
+    "-21.0": {
+      "pace_min_km": 11.39,
+      "sample_bins": 95
+    },
+    "-18.0": {
+      "pace_min_km": 9.94,
+      "sample_bins": 135
+    },
+    "-15.0": {
+      "pace_min_km": 9.06,
+      "sample_bins": 171
+    },
+    "-12.0": {
+      "pace_min_km": 8.45,
+      "sample_bins": 232
+    },
+    "-9.0": {
+      "pace_min_km": 7.62,
+      "sample_bins": 372
+    },
+    "-6.0": {
+      "pace_min_km": 7.66,
+      "sample_bins": 561
+    },
+    "-3.0": {
+      "pace_min_km": 7.6,
+      "sample_bins": 550
+    },
+    "0.0": {
+      "pace_min_km": 7.65,
+      "sample_bins": 699
+    },
+    "3.0": {
+      "pace_min_km": 8.5,
+      "sample_bins": 513
+    },
+    "6.0": {
+      "pace_min_km": 10.24,
+      "sample_bins": 372
+    },
+    "9.0": {
+      "pace_min_km": 11.55,
+      "sample_bins": 302
+    },
+    "12.0": {
+      "pace_min_km": 12.73,
+      "sample_bins": 223
+    },
+    "15.0": {
+      "pace_min_km": 14.43,
+      "sample_bins": 203
+    },
+    "18.0": {
+      "pace_min_km": 15.95,
+      "sample_bins": 144
+    },
+    "21.0": {
+      "pace_min_km": 17.12,
+      "sample_bins": 97
+    },
+    "24.0": {
+      "pace_min_km": 19.18,
+      "sample_bins": 66
+    },
+    "27.0": {
+      "pace_min_km": 19.05,
+      "sample_bins": 30
+    },
+    "30.0": {
+      "pace_min_km": 21.16,
+      "sample_bins": 16
+    },
+    "33.0": {
+      "pace_min_km": 20.14,
+      "sample_bins": 12
+    },
+    "36.0": {
+      "pace_min_km": 19.07,
+      "sample_bins": 5
+    }
+  },
+  "heat_model": {
+    "normalized": true,
+    "threshold_feels_like_c": 22.0,
+    "pct_per_c": 2.0,
+    "temp_basis": "on-course, lapse-corrected from start elevation"
+  },
+  "fatigue_model": {
+    "intercept": 0.8427,
+    "slope_per_km": 0.004417,
+    "max_observed_km": 114.1,
+    "n_bins": 5008,
+    "note": "pace_ratio = intercept + slope_per_km * cumulative_km_into_race; apply as a multiplier on the slope-only baseline pace"
+  }
+}

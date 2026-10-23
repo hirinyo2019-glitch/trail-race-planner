@@ -1,0 +1,302 @@
+:root {
+  --surface-1:      #fcfcfb;
+  --page-plane:     #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --gridline:       #e1e0d9;
+  --baseline:       #c3c2b7;
+  --series-1:       #256abf;
+  --series-1-fill:  rgba(37,106,191,0.16);
+  --series-2:       #eb6834;
+  --good:           #0ca30c;
+  --neg:            #e34948;
+  --border:         rgba(11,11,11,0.10);
+  --chip-bg:        #eef3fa;
+  --elev-fill:      rgba(137,135,129,0.16);
+
+  /* CraftMuse brand tokens (from the V0 design): title/tab green + PRO-badge gold. */
+  --v0-primary:            oklch(0.36 0.055 152);
+  --v0-accent:             oklch(0.72 0.115 78);
+  --v0-accent-foreground:  oklch(0.24 0.04 70);
+  --font-display: 'Oswald', system-ui, sans-serif;
+  --font-sans: 'Noto Sans JP', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+:root[data-theme="dark"] {
+  --surface-1:      #1a1a19;
+  --page-plane:     #0d0d0d;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted:     #898781;
+  --gridline:       #2c2c2a;
+  --baseline:       #383835;
+  --series-1:       #3987e5;
+  --series-1-fill:  rgba(57,135,229,0.20);
+  --series-2:       #d95926;
+  --good:           #0ca30c;
+  --neg:            #e66767;
+  --border:         rgba(255,255,255,0.10);
+  --chip-bg:        #16233a;
+  --elev-fill:      rgba(137,135,129,0.22);
+  --v0-primary:            oklch(0.78 0.09 150);
+  --v0-accent:             oklch(0.78 0.115 80);
+  --v0-accent-foreground:  oklch(0.22 0.04 70);
+}
+:root[data-theme="light"] {
+  --surface-1:      #fcfcfb;
+  --page-plane:     #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --gridline:       #e1e0d9;
+  --baseline:       #c3c2b7;
+  --series-1:       #256abf;
+  --series-1-fill:  rgba(37,106,191,0.16);
+  --series-2:       #eb6834;
+  --good:           #0ca30c;
+  --neg:            #e34948;
+  --border:         rgba(11,11,11,0.10);
+  --chip-bg:        #eef3fa;
+  --elev-fill:      rgba(137,135,129,0.16);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--page-plane);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  padding: 20px 14px 40px;
+}
+/* Android版はスマホ画面(WebView, ~360-430px幅)専用なので、Web版もそのまま
+   同じ見た目になるよう幅をスマホ相当に固定する(デスクトップの広い画面向け
+   レイアウトは今後作らない方針のため)。 */
+.wrap { max-width: 440px; margin: 0 auto; }
+.stats-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.stat-chip {
+  background: var(--chip-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; font-size: 13px; color: var(--text-secondary);
+}
+.stat-chip b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.stat-chip.accent { background: var(--series-1); color: #fff; }
+.stat-chip.accent b { color: #fff; }
+.stat-chip.warn { background: var(--neg); color: #fff; }
+.stat-chip.warn b { color: #fff; }
+
+.section-note.warn-note { color: var(--neg); }
+
+details { margin: 16px 0; border: 1px solid var(--border); border-radius: 8px; padding: 4px 14px; }
+details[open] { padding-bottom: 14px; }
+details .section-note { margin-top: 10px; }
+.details-summary {
+  cursor: pointer; padding: 10px 0; font-size: 14px; font-weight: 700; color: var(--text-primary);
+  list-style: none;
+}
+.details-summary::-webkit-details-marker { display: none; }
+.details-summary::before { content: '▸ '; color: var(--text-muted); }
+details[open] .details-summary::before { content: '▾ '; }
+
+.card {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; margin-bottom: 20px; overflow-x: auto;
+}
+h2.section-title { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+h3.subsection-title { font-size: 14px; font-weight: 700; margin: 22px 0 4px; color: var(--text-primary); }
+.section-note { font-size: 13px; color: var(--text-secondary); margin: 0 0 14px; line-height: 1.6; }
+.dropzone {
+  border: 2px dashed var(--border); border-radius: 12px; padding: 40px 20px;
+  text-align: center; color: var(--text-secondary); font-size: 14px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.dropzone:hover, .dropzone.dragover { border-color: var(--series-1); background: var(--chip-bg); }
+.dropzone input { display: none; }
+.dropzone .dz-title { font-weight: 700; color: var(--text-primary); margin-bottom: 4px; font-size: 15px; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
+.field input {
+  width: 100%; padding: 8px 10px; border-radius: 7px; border: 1px solid var(--border);
+  background: var(--surface-1); color: var(--text-primary); font-size: 14px; font-variant-numeric: tabular-nums;
+}
+.field input:focus { outline: 2px solid var(--series-1); outline-offset: 1px; }
+
+button.btn {
+  background: var(--series-1); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+button.btn:hover { filter: brightness(1.08); }
+button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+button.btn.secondary { background: var(--chip-bg); color: var(--series-1); }
+button.btn.small { padding: 5px 10px; font-size: 12px; }
+button.btn.danger { background: transparent; color: var(--neg); }
+/* transparent背景にbrightness()フィルターをかけてもほぼ変化が見えないため、
+   danger系ボタン(この予測を削除/モデルをリセット等)には専用のhover背景を
+   用意する(2026-09-05、ユーザー報告: カーソルを合わせても反応が分からない)。 */
+button.btn.danger:hover { background: rgba(227,73,72,0.12); }
+
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  text-align: left; font-weight: 600; color: var(--text-secondary); font-size: 11.5px;
+  text-transform: uppercase; letter-spacing: 0.04em; padding: 0 10px 10px;
+  border-bottom: 1px solid var(--gridline); white-space: nowrap;
+}
+thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+thead th.pred-col { color: var(--series-1); }
+td.pred-col { color: var(--series-1); font-weight: 600; }
+thead th.weather-col { color: #d9822b; }
+td.weather-col { color: var(--text-secondary); }
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--gridline); }
+tbody tr:last-child td { border-bottom: none; }
+tr.row-endpoint td { font-weight: 600; }
+td input.cp-name { width: 100%; border: 1px solid transparent; background: transparent; color: var(--text-primary); font-size: 13.5px; padding: 4px 6px; border-radius: 5px; }
+td input.cp-dist { width: 80px; border: 1px solid transparent; background: transparent; color: var(--text-primary); font-size: 13.5px; padding: 4px 6px; border-radius: 5px; text-align: right; font-variant-numeric: tabular-nums; }
+td input.cp-name:hover, td input.cp-dist:hover, td input.cp-name:focus, td input.cp-dist:focus { border-color: var(--border); background: var(--chip-bg); }
+/* cutoff is optional and usually empty -- keep a visible border so it reads as an input */
+td .cp-cutoff-wrap { margin-top: 4px; }
+td input.cp-cutoff { width: 80px; border: 1px solid var(--border); background: transparent; color: var(--text-primary); font-size: 13.5px; padding: 4px 6px; border-radius: 5px; text-align: right; font-variant-numeric: tabular-nums; }
+td input.cp-cutoff:focus { background: var(--chip-bg); }
+.cutoff-ok { color: var(--good); }
+.cutoff-tight { color: #d9822b; }
+.cutoff-over { color: var(--neg); }
+.cell-sub.cutoff-trap-note { color: #d9822b; font-weight: 600; }
+.point-badge {
+  display: inline-block; min-width: 46px; text-align: center; padding: 3px 8px;
+  border-radius: 6px; background: var(--chip-bg); color: var(--series-1);
+  font-weight: 700; font-size: 12px;
+}
+
+/* Cosmetic-only "future paid tier" marker (2026-09-08) -- no feature behind
+   it is actually locked yet, since the app has no accounts/payment infra.
+   Uses --v0-accent (already the app's one warm/gold token) so it reads as a
+   distinct tier signal without introducing a new brand color. */
+.pro-badge {
+  display: inline-block; padding: 2px 7px; margin-left: 8px;
+  border-radius: 5px; background: var(--v0-accent); color: var(--v0-accent-foreground);
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle;
+}
+
+/* Wide per-CP report tables (12+ raw columns) can't fit a phone's width even
+   squeezed, so related values are merged into one cell each (main value +
+   a small secondary line) to get the column count down to something that
+   fits ~380px without giving up the table's column-scan readability. */
+/* table-layout:fixed forces columns to split the 100% width exactly, so the
+   table can never grow past the card no matter how long a cell's content is
+   -- auto layout would otherwise expand past 100% to fit each column's
+   widest unbreakable token (a time, a "+1236/-1078m" string, etc). */
+table.compact-table { font-size: 12.5px; table-layout: fixed; }
+table.compact-table th, table.compact-table td { padding: 6px 4px; overflow-wrap: break-word; }
+table.compact-table thead th { font-size: 9.5px; white-space: normal; line-height: 1.3; }
+.cell-main { font-weight: 700; font-variant-numeric: tabular-nums; }
+.cell-sub { font-size: 10px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: 1px; }
+tr.row-endpoint .cell-main { font-weight: 700; }
+tr.note-row td.row-note { padding: 2px 5px 8px; border-bottom: 1px solid var(--gridline); color: var(--text-muted); font-size: 11.5px; line-height: 1.5; }
+tr.note-row:last-child td.row-note { border-bottom: none; }
+td.gel-count { font-size: 15px; font-weight: 700; color: var(--series-1); }
+.cell-sub.gel-surplus { color: var(--text-muted); }
+.row-note { color: var(--text-muted); font-size: 12px; margin-top: 6px; line-height: 1.5; }
+
+svg { width: 100%; height: auto; display: block; overflow: visible; }
+.gridline { stroke: var(--gridline); stroke-width: 1; }
+.axis-label { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cp-dropline { stroke: var(--baseline); stroke-width: 1; stroke-dasharray: 2 3; }
+.elev-dropline { stroke: var(--baseline); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.6; }
+.cp-dot { fill: var(--surface-1); stroke: var(--series-1); stroke-width: 2.5; }
+.cp-name { fill: var(--text-primary); font-size: 12.5px; font-weight: 700; }
+.cp-dist { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cp-pred { fill: var(--series-1); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+  paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
+.peak-dot { fill: var(--series-1); }
+.peak-label { fill: var(--text-secondary); font-size: 11px; font-weight: 600;
+  paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
+.baseline-axis { stroke: var(--baseline); stroke-width: 1.5; }
+.elev-fill { fill: var(--elev-fill); }
+.elev-line { fill: none; stroke: var(--text-muted); stroke-width: 1.5; stroke-linejoin: round; }
+.elev-holder { margin-bottom: 4px; }
+
+.caution-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px; margin-bottom: 20px;
+}
+.caution-card { border-left: 3px solid #fab219; background: var(--chip-bg); border-radius: 0 8px 8px 0; padding: 12px 14px; }
+.caution-card .caution-label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #b9790a; }
+:root[data-theme="dark"] .caution-card .caution-label { color: #fab219; }
+.caution-card .caution-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 4px 0 6px; }
+.caution-card .caution-body { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+.crosshair { stroke: var(--text-muted); stroke-width: 1; opacity: 0; pointer-events: none; }
+.hover-dot { opacity: 0; pointer-events: none; }
+.tooltip {
+  position: absolute; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-primary);
+  pointer-events: none; opacity: 0; transform: translate(-50%, -110%); white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12); line-height: 1.7;
+}
+.tooltip b { font-variant-numeric: tabular-nums; }
+.chart-holder { position: relative; }
+
+.hidden { display: none !important; }
+.msg { font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-top: 10px; }
+.msg.error { background: rgba(227,73,72,0.12); color: var(--neg); }
+.msg.info { background: var(--chip-bg); color: var(--text-secondary); }
+.msg.ok { background: rgba(12,163,12,0.12); color: var(--good); }
+
+.actions-row { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+
+footer { color: var(--text-muted); font-size: 12px; margin-top: 10px; text-align: center; }
+.card-footnote { color: var(--text-muted); font-size: 12px; margin-top: 14px; line-height: 1.7; }
+
+
+/* ---------- app shell: header + 3 tabs ---------- */
+.app-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.brand-logo { display: block; height: 22px; width: auto; }
+.app-title {
+  font-family: var(--font-display); color: var(--v0-primary); font-weight: 700;
+  font-size: 20px; letter-spacing: 0.01em; text-transform: uppercase; margin: 0;
+}
+.lang-switch {
+  margin-left: auto; display: flex; padding: 2px; flex-shrink: 0;
+  background: var(--chip-bg); border: 1px solid var(--border); border-radius: 8px;
+}
+.lang-btn {
+  padding: 4px 10px; border: none; border-radius: 6px; background: transparent;
+  color: var(--text-secondary); font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.lang-btn.active { background: var(--surface-1); color: var(--v0-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.tab-bar {
+  position: sticky; top: 0; z-index: 10; display: flex; gap: 4px; padding: 4px;
+  margin-bottom: 16px; background: var(--chip-bg); border: 1px solid var(--border); border-radius: 10px;
+}
+.tab-btn {
+  flex: 1; padding: 9px 0; border: none; border-radius: 7px; background: transparent;
+  color: var(--text-secondary); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.tab-btn.active { background: var(--surface-1); color: var(--v0-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+button.btn.block { width: 100%; padding: 13px 18px; font-size: 15px; }
+.form-grid.two-col { grid-template-columns: 1fr 1fr; }
+.link-btn { background: none; border: none; padding: 0; color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; }
+.link-btn:hover { color: var(--text-primary); }
+
+/* ---------- result summary ---------- */
+.result-card { text-align: center; }
+.result-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.04em; }
+.result-time { font-family: var(--font-display); font-size: 44px; font-weight: 700; color: var(--series-1); line-height: 1.15; font-variant-numeric: tabular-nums; }
+.result-sub { font-size: 13px; color: var(--text-secondary); }
+.result-card .stats-row { justify-content: center; }
+.result-card .section-note { text-align: left; }
+.plain-details { border: none; padding: 0; margin: 10px 0 0; }
+.plain-details[open] { padding-bottom: 0; }
+
+/* ---------- lists (マイレース / 振り返り) ---------- */
+.model-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; margin: 0 0 4px; }
+.status-dot { flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+.status-dot.on { background: var(--good); }
+#myRacesList, #reviewList { margin-top: 14px; }
+.list-table td:last-child, .list-table th:last-child { width: 56px; }
+.list-table.clickable tbody tr { cursor: pointer; }
+.list-table.clickable tbody tr:hover td { background: var(--chip-bg); }
+.tag { display: inline-block; padding: 2px 7px; border-radius: 5px; background: var(--chip-bg); color: var(--text-secondary); font-size: 11px; font-weight: 700; white-space: nowrap; }
+.tag.done { background: var(--series-1); color: #fff; }
+.diff-slow { color: var(--neg); }
+.diff-fast { color: var(--good); }
+tr.unmatched td { opacity: 0.55; }

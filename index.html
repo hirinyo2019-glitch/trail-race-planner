@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trail Race Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=202610231443">
+</head>
+<body>
+<style>#pyStatus{position:sticky;top:0;z-index:50;background:#2f6f4f;color:#fff;font-size:13px;padding:8px 12px;text-align:center}#pyStatus.hidden{display:none}</style>
+<div id="pyStatus" class="hidden"></div>
+<div class="wrap">
+  <header class="app-header">
+    <img src="assets/craftmuse-logo.png" class="brand-logo" alt="CraftMuse">
+    <h1 class="app-title">Trail Race Planner</h1>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button class="lang-btn" type="button" data-lang="ja">日本語</button>
+      <button class="lang-btn" type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <nav class="tab-bar" role="tablist">
+    <button class="tab-btn" type="button" data-tab="myRacesTab" data-i18n="tab.myRaces">マイレース</button>
+    <button class="tab-btn" type="button" data-tab="predictTab" data-i18n="tab.predict">予測</button>
+    <button class="tab-btn" type="button" data-tab="reviewTab" data-i18n="tab.review">振り返り</button>
+  </nav>
+
+  <!-- ===== 予測 ===== -->
+  <section id="predictTab" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title" data-i18n="course.title">1. コースGPX</h2>
+      <p class="section-note" data-i18n="course.note">大会公式のコースGPXを選択してください(名前付きwaypointがあればCPとして自動検出します)。</p>
+      <div class="dropzone" id="dropzone">
+        <div class="dz-title" data-i18n="course.dzTitle">GPXファイルを選択</div>
+        <div id="dropzoneSub" data-i18n="course.dzSub">.gpx ファイルのみ対応</div>
+        <input type="file" id="fileInput" accept=".gpx">
+      </div>
+      <div id="uploadMsg"></div>
+      <div class="hidden" id="courseInfo">
+        <div class="stats-row" id="courseStats"></div>
+        <div class="elev-holder" style="margin-top:14px;">
+          <svg viewBox="0 0 1200 110" id="previewElevSvg"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="raceSetupCard">
+      <h2 class="section-title" data-i18n="setup.title">2. レース条件</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label for="raceStart" data-i18n="setup.raceStart">スタート日時(現地時刻)</label>
+          <input type="datetime-local" id="raceStart">
+        </div>
+        <div class="field">
+          <label for="bodyweight" data-i18n="setup.bodyweight">体重(kg)</label>
+          <input type="number" id="bodyweight" value="70" step="0.5" min="30" max="150">
+        </div>
+      </div>
+      <div id="weatherMsg"></div>
+      <div class="form-grid hidden" id="manualWeatherGrid">
+        <div class="field">
+          <label for="manualTemp" data-i18n="setup.manualTemp">平均気温(&deg;C)</label>
+          <input type="number" id="manualTemp" step="0.5">
+        </div>
+        <div class="field">
+          <label for="manualHum" data-i18n="setup.manualHum">平均湿度(%)</label>
+          <input type="number" id="manualHum" step="1" value="60">
+        </div>
+      </div>
+
+      <p class="section-note warn-note hidden" id="cpAutoDetectWarning" style="margin-top:14px;" data-i18n="setup.cpWarn">CPを自動検出できなかったため、距離を仮配置しています。「チェックポイント」で確認・修正してください。</p>
+
+      <details id="editCheckpointsDetails">
+        <summary class="details-summary" data-i18n="setup.checkpoints">チェックポイント</summary>
+        <table id="cpTable">
+          <thead><tr><th>Point</th><th data-i18n="setup.cpName">名前</th><th class="num" data-i18n="setup.cpDistCutoff">距離(km)/関門</th><th></th></tr></thead>
+          <tbody id="cpTableBody"></tbody>
+        </table>
+        <p class="section-note" data-i18n="setup.cutoffNote">関門(任意): 大会の関門時刻を 14:30 のように入れると、関門までの余裕を表示します。日をまたぐ関門は自動で翌日として扱います。2日以上あとの関門は 30:00(2日目の6:00)のように24を足して入れてください。</p>
+        <div class="actions-row">
+          <button class="btn secondary small" id="addCpBtn" type="button" data-i18n="setup.addCp">+ CPを追加</button>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="dwellMin" data-i18n="setup.dwell">CP滞在時間(分)</label>
+            <input type="number" id="dwellMin" value="5" step="1" min="0" max="60">
+          </div>
+        </div>
+      </details>
+
+      <details id="targetTimeDetails">
+        <summary class="details-summary" data-i18n="setup.target">目標タイム(任意)<span class="pro-badge">PRO</span></summary>
+        <p class="section-note" data-i18n="setup.targetNote">予測より速い目標を入れると、登り・下り・平地ごとのペース配分プランも表示します。</p>
+        <div class="form-grid two-col">
+          <div class="field">
+            <label for="targetHours" data-i18n="setup.hours">時間</label>
+            <input type="number" id="targetHours" step="1" min="0" max="72" placeholder="7">
+          </div>
+          <div class="field">
+            <label for="targetMinutes" data-i18n="setup.minutes">分</label>
+            <input type="number" id="targetMinutes" step="1" min="0" max="59" placeholder="50">
+          </div>
+        </div>
+      </details>
+
+      <div class="actions-row">
+        <button class="btn block" id="runPlanBtn" type="button" disabled data-i18n="setup.run">予測する</button>
+      </div>
+      <div id="planMsg"></div>
+    </div>
+
+    <div id="reportSection" class="hidden"></div>
+  </section>
+
+  <!-- ===== マイレース ===== -->
+  <section id="myRacesTab" class="tab-panel hidden">
+    <div class="card">
+      <h2 class="section-title" data-i18n="my.title">マイレース</h2>
+      <p class="section-note" data-i18n="my.note">自分が走った過去レースのGPX(ウォッチの記録など、時刻付き)を登録すると、あなた専用のペースモデルが自動で作られ、予測に使われます。</p>
+      <p class="model-status" id="modelStatus"></p>
+      <div class="actions-row">
+        <button class="btn" id="addRaceBtn" type="button" data-i18n="my.add">+ レースを追加</button>
+      </div>
+      <input type="file" id="addRaceFileInput" accept=".gpx" multiple class="hidden">
+      <div id="myRacesMsg"></div>
+      <div id="myRacesList"></div>
+    </div>
+  </section>
+
+  <!-- ===== 振り返り ===== -->
+  <section id="reviewTab" class="tab-panel hidden">
+    <div class="card" id="reviewListCard">
+      <h2 class="section-title" data-i18n="review.title">振り返り</h2>
+      <p class="section-note" data-i18n="review.note">予測したレースが自動で保存されて並びます。レース後に実際の記録GPXを入れると、CPごとに予測との差が見られます。</p>
+      <div id="reviewList"></div>
+    </div>
+    <div class="card hidden" id="reviewDetailCard"></div>
+  </section>
+
+  <footer>Trail Race Planner &middot; CraftMuse<br><small>データはこのブラウザの中だけに保存されます / Your data stays in this browser.</small></footer>
+</div>
+<script src="i18n.js?v=202610231443"></script>
+<script src="pyodide-api.js?v=202610231443"></script>
+<script src="app.js?v=202610231443"></script>
+</body>
+</html>
